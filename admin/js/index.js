@@ -1,24 +1,32 @@
 var urlAPI = 'https://66acc4e9f009b9d5c7335514.mockapi.io/products_2';
 const btnThem = document.getElementById('btnThem');
+const btnThemSP = document.getElementById('btnThemSP');
 const btnCapNhatSP = document.getElementById('btnCapNhatSP');
 const btnTimSP = document.getElementById('btnTimSP');
 const arrowUp = document.getElementById('arrowUp');
 const arrowDown = document.getElementById('arrowDown');
+const list = document.getElementById('tableDanhSach');
 
+// Nút thêm sản phẩm, hiện modal và ẩn nút cập nhật
 btnThem.addEventListener('click', function(e) {
     e.preventDefault();
+    btnThemSP.style.display = 'block';
+    btnCapNhatSP.style.display = 'none';
     resetModal();
 })
 
+// Nút cập nhật sản phẩm
 btnCapNhatSP.addEventListener('click', function(e) {
     e.preventDefault();
 })
 
+// Nút tìm sản phẩm
+// Tìm theo tiêu chí hoặc chỉ theo loại hoặc kết hợp tìm theo loại + sắp xếp sản phẩm theo giá
 btnTimSP.addEventListener('click', function(e) {
     e.preventDefault();
     var loaiSP = document.getElementById('searchName').value.toLowerCase();
 
-    if(arrowUp.style.color == '#007bff' && arrowDown.style.color == '#007bff') {
+    if(arrowUp.style.color != 'red' && arrowDown.style.color != 'red') {
         searchProduct(loaiSP);
     }
     else if(arrowUp.style.color == 'red') {
@@ -29,6 +37,7 @@ btnTimSP.addEventListener('click', function(e) {
     }
 })
 
+// Hai mũi tên dùng để sắp xếp danh sách sản phẩm theo giá tiền
 arrowUp.addEventListener('click', function(e) {
     e.preventDefault();
     arrowUp.style.color = 'red';
@@ -43,16 +52,28 @@ arrowDown.addEventListener('click', function(e) {
     filterAndSortProduct(false);
 })
 
+// Bất cứ nút sửa sản phẩm nào cũng sẽ kích hoạt modal, ẩn nút thêm và hiện nút cập nhật
+list.addEventListener('click', function(e) {
+    if(e.target && e.target.classList.contains('suaSP')) {
+        btnThemSP.style.display = 'none';
+        btnCapNhatSP.style.display = 'block';
+    }
+})
+
+// Hàm hiển thị danh sách
 function fetchListProduct() {
     axios({
         url: urlAPI,
         method: "GET",
     }).then(function(res) {
         renderProduct(res.data);
-    }).catch(function(err) {})
+    }).catch(function(err) {
+        alert(err);
+    })
 }
 fetchListProduct();
 
+// Hàm render có chức in danh sách sản phẩm
 function renderProduct(listProduct) {
     var contentHTML = '';
     for(var i = 0; i < listProduct.length; i++) {       
@@ -69,7 +90,7 @@ function renderProduct(listProduct) {
                         <td>${product.type}</td>
                         <td>
                             <button class='btn btn-danger' onclick='delProduct(${product.id})'>Xóa</button>
-                            <button class='btn btn-success' onclick='editProduct(${product.id})'>Sửa</button>
+                            <button class='btn btn-success suaSP' onclick='editProduct(${product.id})'>Sửa</button>
                         </td>
                     </tr>`;
             contentHTML += tString;
@@ -77,6 +98,7 @@ function renderProduct(listProduct) {
     document.getElementById('tableDanhSach').innerHTML = contentHTML;
 }
 
+// Hàm hiển thị danh sách sản phẩm dựa vào loại sản phẩm
 function searchProduct(loaiSP) {
     axios({
         url: urlAPI,
@@ -89,7 +111,9 @@ function searchProduct(loaiSP) {
         })
 
         renderProduct(filterProducts);
-    }).catch(function(err) {})
+    }).catch(function(err) {
+        alert(err);
+    })
 }
 
 // function sortProductsByPrice(isAscending) {
@@ -107,6 +131,8 @@ function searchProduct(loaiSP) {
 //     }).catch(function(err) {})
 // }
 
+
+// Hàm hiển thị danh sách sản phẩm dựa vào 2 tiêu chí: loại sản phẩm + sắp xếp giá tiền
 function filterAndSortProduct(isAscending) {
     var loaiSP = document.getElementById('searchName').value.toLowerCase();
 
@@ -127,22 +153,37 @@ function filterAndSortProduct(isAscending) {
         }
 
         renderProduct(filterProducts);
-    }).catch(function(err) {})
+    }).catch(function(err) {
+        alert(err);
+    })
 }
 
+// Hàm thêm sản phẩm, có validation
 function addProduct() {
     var product = getDataForm();
-    axios({
-        url: urlAPI,
-        method: "POST",
-        data: product,
-    }).then(function(res) {
-        $("#myModal").modal('hide');
-        fetchListProduct();
-    }).catch(function(err) {
-    });
+
+    var thongBao = document.getElementsByClassName('sp-thongbao');
+    if(validateForm() == false) {
+        for (let i = 0; i < thongBao.length; i++) {
+            thongBao[i].style.display = 'inline-block';
+        }
+    }
+    else {
+        axios({
+            url: urlAPI,
+            method: "POST",
+            data: product,
+        }).then(function(res) {
+            alert('Thêm sản phẩm thành công')
+            $("#myModal").modal('hide');
+            fetchListProduct();
+        }).catch(function(err) {
+            alert(err);
+        });
+    }
 }
 
+// Hàm xóa sản phẩm, có xác nhận trước khi xóa
 function delProduct(id) {
     const xacNhanXoaSP = confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');
     if(xacNhanXoaSP) {
@@ -156,11 +197,9 @@ function delProduct(id) {
             alert('Lỗi! Không thể xóa sản phẩm')
         })
     }
-    else {
-
-    }
 }
 
+// Hàm dùng để hiển thị thông tin sản phẩm cần cập nhật lên trên modal
 function editProduct(id) {
     axios({
         url: `${urlAPI}/${id}`,
@@ -179,23 +218,38 @@ function editProduct(id) {
         document.getElementById('loaiSP').value = product.type;
 
         document.getElementById('layMaSP').innerText = product.id;
-    }).catch(function(err) {})
+    }).catch(function(err) {
+        alert(err);
+    })
 }
 
+// Hàm cập nhật sản phẩm, có validation
 function updateProduct() {
     var id = document.getElementById('layMaSP').innerText;
     var product = getDataForm();
 
-    axios({
-        url: `${urlAPI}/${id}`,
-        method: "PUT",
-        data: product, 
-    }).then(function(res) {
-        $('#myModal').modal('hide');
-        fetchListProduct();
-    }).catch(function(err) {}) 
+    var thongBao = document.getElementsByClassName('sp-thongbao');
+    if(validateForm() == false) {
+        for (let i = 0; i < thongBao.length; i++) {
+            thongBao[i].style.display = 'inline-block';
+        }
+    }
+    else {
+        axios({
+            url: `${urlAPI}/${id}`,
+            method: "PUT",
+            data: product, 
+        }).then(function(res) {
+            alert('Cập nhật sản phẩm thành công');
+            $('#myModal').modal('hide');
+            fetchListProduct();
+        }).catch(function(err) {
+            alert(err);
+        }) 
+    }    
 }
 
+// Hàm trung gian dùng để tiếp nhận thông tin nhập vào từ modal
 function getDataForm() {
     var name = document.getElementById('tenSP').value;
     var price = document.getElementById('giaSP').value;
@@ -217,6 +271,7 @@ function getDataForm() {
     }
 }
 
+// Hàm reset thông tin trên modal, thường sử dụng khi cần thêm sản phẩm mới
 function resetModal() {
     document.getElementById('tenSP').value = "";
     document.getElementById('giaSP').value = "";
