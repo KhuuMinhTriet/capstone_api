@@ -31,9 +31,9 @@ fetchListProduct();
 function renderProduct(listProduct) {
   let contentHTML = "";
   for (let index = 0; index < listProduct.length; index++) {
-    let divString = `<div class="col-6">
+    let divString = `<div class="col-lg-6 col-md-12">
                             <div class="row">
-                                <div id="introPhone" class="col-6">
+                                <div id="introPhone" class="col-6 ">
                                     <h4> ${listProduct[index].name}</h4>
                                     <p>Màn Hình: ${
                                       listProduct[index].screen

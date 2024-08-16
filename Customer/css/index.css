@@ -2,6 +2,13 @@
   box-sizing: border-box;
 }
 
+.container {
+  background: url(../pngtree-d-render-of-mobile-phone-searching-for-profitable-sales-and-discounts-picture-image_4845495\ copy.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .shopping {
   text-align: end;
 }
@@ -24,4 +31,4 @@
 #introPhone .price {
   font-size: 30px;
   color: red;
-} /*# sourceMappingURL=index.css.map */
+}/*# sourceMappingURL=index.css.map */
