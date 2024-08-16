@@ -1,0 +1,25 @@
+* {
+  box-sizing: border-box;
+}
+
+.shopping {
+  text-align: end;
+  i {
+    font-size: 20px;
+  }
+}
+
+#imagePhone img {
+  width: 300px;
+  height: auto;
+}
+#bodyPhone {
+  margin: 100px 0 50px;
+}
+#introPhone {
+  line-height: 20px;
+  .price {
+    font-size: 30px;
+    color: red;
+  }
+}
