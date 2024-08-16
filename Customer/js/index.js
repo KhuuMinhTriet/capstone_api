@@ -159,5 +159,9 @@ function buyNow() {
   cart = [];
   localStorage.removeItem("cart");
   renderCart();
-  alert("Cảm ơn bạn đã mua hàng!");
+  Swal.fire({
+    title: "Chúc Mừng",
+    text: "Bạn đã mua hàng thành công!",
+    icon: "success",
+  });
 }
