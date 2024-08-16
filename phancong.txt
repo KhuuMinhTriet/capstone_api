@@ -1,0 +1,14 @@
+- Khưu Minh Triết:
++ Admin page:
+    *CRUD: 
+    Hiển thị sản phẩm
+    Thêm sản phẩm
+    Xóa sản phẩm
+    Sửa sản phẩm
+
+    *Check validation
+    *Tìm kiếm sản phẩm theo loại + kết hợp sắp xếp sản phẩm theo giá
+    *Sắp xếp sản phẩm theo giá, biểu thị bằng 2 mũi tên ở ô Giá 
+
+- Nguyễn Tiến Nhân:
+
