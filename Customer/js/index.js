@@ -32,7 +32,7 @@ function renderProduct(listProduct) {
   let contentHTML = "";
   for (let index = 0; index < listProduct.length; index++) {
     let divString = `<div class="col-lg-6 col-md-12">
-                            <div class="row">
+                            <div class="row" id="boderPhone">
                                 <div id="introPhone" class="col-6 ">
                                     <h4> ${listProduct[index].name}</h4>
                                     <p>Màn Hình: ${

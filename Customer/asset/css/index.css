@@ -4,9 +4,9 @@
 
 .shopping {
   text-align: end;
-  i {
-    font-size: 20px;
-  }
+}
+.shopping i {
+  font-size: 20px;
 }
 
 #boderPhone {
@@ -41,15 +41,16 @@
 
 #introPhone {
   line-height: 20px;
-  .price {
-    font-size: 30px;
-    color: red;
-  }
+}
+#introPhone .price {
+  font-size: 30px;
+  color: red;
 }
 
 .btn {
   transition: transform 0.3s ease;
 }
+
 .btn:hover {
   transform: translateY(-5px);
-}
+}/*# sourceMappingURL=index.css.map */
