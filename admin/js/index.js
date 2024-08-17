@@ -24,10 +24,10 @@ btnCapNhatSP.addEventListener('click', function(e) {
 // Tìm theo tiêu chí hoặc chỉ theo loại hoặc kết hợp tìm theo loại + sắp xếp sản phẩm theo giá
 btnTimSP.addEventListener('click', function(e) {
     e.preventDefault();
-    var loaiSP = document.getElementById('searchName').value.toLowerCase();
+    var tenSP = document.getElementById('searchName').value.toLowerCase();
 
     if(arrowUp.style.color != 'red' && arrowDown.style.color != 'red') {
-        searchProduct(loaiSP);
+        searchProduct(tenSP);
     }
     else if(arrowUp.style.color == 'red') {
         filterAndSortProduct(true);
@@ -73,7 +73,7 @@ function fetchListProduct() {
 }
 fetchListProduct();
 
-// Hàm render có chức in danh sách sản phẩm
+// Hàm render có chức năng in danh sách sản phẩm
 function renderProduct(listProduct) {
     var contentHTML = '';
     for(var i = 0; i < listProduct.length; i++) {       
@@ -98,8 +98,8 @@ function renderProduct(listProduct) {
     document.getElementById('tableDanhSach').innerHTML = contentHTML;
 }
 
-// Hàm hiển thị danh sách sản phẩm dựa vào loại sản phẩm
-function searchProduct(loaiSP) {
+// Hàm hiển thị danh sách sản phẩm dựa vào tên sản phẩm
+function searchProduct(tenSP) {
     axios({
         url: urlAPI,
         method: "GET",
@@ -107,7 +107,7 @@ function searchProduct(loaiSP) {
 
         var productList = res.data;
         var filterProducts = productList.filter(function(product) {
-            return product.type.toLowerCase().includes(loaiSP);
+            return product.name.toLowerCase().includes(tenSP);
         })
 
         renderProduct(filterProducts);
@@ -134,7 +134,7 @@ function searchProduct(loaiSP) {
 
 // Hàm hiển thị danh sách sản phẩm dựa vào 2 tiêu chí: loại sản phẩm + sắp xếp giá tiền
 function filterAndSortProduct(isAscending) {
-    var loaiSP = document.getElementById('searchName').value.toLowerCase();
+    var tenSP = document.getElementById('searchName').value.toLowerCase();
 
     axios({
         url: urlAPI,
@@ -143,7 +143,7 @@ function filterAndSortProduct(isAscending) {
 
         var productList = res.data;
         var filterProducts = productList.filter(function(product) {
-            return product.type.toLowerCase().includes(loaiSP);
+            return product.name.toLowerCase().includes(tenSP);
         })
 
         if(isAscending !== undefined) {
@@ -261,7 +261,7 @@ function getDataForm() {
     var type = document.getElementById('loaiSP').value;
     return {
         name: name,
-        price: price,
+        price: Number(price),
         screen: screen,
         backCamera: backCamera,
         frontCamera: frontCamera,
